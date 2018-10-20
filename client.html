@@ -1,0 +1,33 @@
+<!--  lost cities drag and drop with JS -->
+
+<!doctype html>
+
+<html>
+<head>
+	
+	<title>Lost Cities</title>
+	
+	<script src="drag.js"></script>
+	
+	<link type="text/css" rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+	<div class="pile" id="deck" draggable="true">
+	</div>
+
+	<div class="pile" name="red" id="pile1" ondrop="drop(event)" ondragover="allowdrop(event)">
+	</div>
+
+	<div class="pile" id="pile2" ondrop="drop(event)" ondragover="allowdrop(event)">
+	</div>
+
+	<div class="pile" id="pile3" ondrop="drop(event)" ondragover="allowdrop(event)">
+	</div>
+
+	<div class="pile" id="pile4" ondrop="drop(event)" ondragover="allowdrop(event)">
+	</div>
+
+</body>
+</html>
