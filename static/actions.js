@@ -5,8 +5,13 @@ var pilecounts = {
 	"pile4": 0,
 };
 
+function startdrag(ev){
+	ev.dataTransfer.setData("card", "true");
+}
+
 function drop (ev) {
 	ev.preventDefault();
+	if(ev.dataTransfer.getData("card") !== "true") return;
 	ev.target.innerText = ++pilecounts[ev.target.id];
 	var color;
 	switch(ev.target.id){
@@ -17,7 +22,7 @@ function drop (ev) {
 	}
 
 	const Http = new XMLHttpRequest();
-	const url = "http://localhost:5000/colorprinter"
+	const url = "http://localhost:5000/piledrop"
 
 	Http.open("POST", url);
 	Http.send(color);

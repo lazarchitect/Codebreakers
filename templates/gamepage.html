@@ -5,19 +5,19 @@
 <html>
 <head>
 	
-	<title>Lost Cities</title>
+	<title>Codebreakers</title>
 	
-	<script src="drag.js"></script>
+	<script src="static/actions.js"></script>
 	
-	<link type="text/css" rel="stylesheet" href="style.css">
+	<link type="text/css" rel="stylesheet" href="static/style.css">
 
 </head>
 <body>
 
-	<div class="pile" id="deck" draggable="true">
+	<div class="pile" id="deck" draggable="true" ondragstart="startdrag(event)">
 	</div>
 
-	<div class="pile" name="red" id="pile1" ondrop="drop(event)" ondragover="allowdrop(event)">
+	<div class="pile" id="pile1" ondrop="drop(event)" ondragover="allowdrop(event)">
 	</div>
 
 	<div class="pile" id="pile2" ondrop="drop(event)" ondragover="allowdrop(event)">

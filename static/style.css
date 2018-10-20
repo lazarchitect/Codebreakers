@@ -1,25 +1,30 @@
 
 #deck{
-	background-color: gray;
+	background-image: url("matrix.png");
+	background-size: cover;
 }
 
 #pile1{
 	border: 2px solid red;
+	background-color: #ffcccc;
 	left: 150px;
 }
 
 #pile2{
 	border: 2px solid blue;
+	background-color: #ccccff;
 	left: 300px;
 }
 
 #pile3{
 	border: 2px solid green;
+	background-color: #ccffcc;
 	left: 450px;
 }
 
 #pile4{
 	border: 2px solid yellow;
+	background-color: #ffffcc;
 	left: 600px;
 }
 
