@@ -21,3 +21,5 @@ def piledrop():
 	resp.headers['Access-Control-Allow-Origin'] = '*'
 	
 	return resp
+
+app.run()	
