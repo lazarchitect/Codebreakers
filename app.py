@@ -7,22 +7,38 @@ def splash():
 	"""main page. Loads up splash screen."""
 	return render_template("splash.html")
 
-@app.route("/gamepage")
-def gamepage():
-	"""The webpage for being in a game. Loads up game HTML elements.
-	Should be unable to reach here manually."""
-	return render_template("gamepage.html")
+@app.route("/signup")
+def signupPage():
+	return render_template("signup.html")
 
-@app.route("/piledrop", methods=["POST"])
-def piledrop():
-	"""handler for placing a card on a pile.
-	called with AJAX from game page. cannot manually get here."""
-	color = request.get_data().decode("utf-8")
+@app.route("/signupAction", methods=["POST"])
+def signupAction():
+	print(request.get_data())
 
-	resp = Response("Hello from localhost 5k! You dragged a card to the " + color + " pile!");
+@app.route("/login")
+def loginPage():
+	return render_template("login.html")
 
-	resp.headers['Access-Control-Allow-Origin'] = '*'
+@app.route("/loginAction", methods=["POST"])
+def loginAction():
+	print(request.get_data())
+
+# @app.route("/gamepage")
+# def gamepage():
+# 	"""The webpage for being in a game. Loads up game HTML elements.
+# 	Should be unable to reach here manually."""
+# 	return render_template("gamepage.html")
+
+# @app.route("/piledrop", methods=["POST"])
+# def piledrop():
+# 	"""handler for placing a card on a pile.
+# 	called with AJAX from game page. cannot manually get here."""
+# 	color = request.get_data().decode("utf-8")
+
+# 	resp = Response("Hello from localhost 5k! You dragged a card to the " + color + " pile!");
+
+# 	resp.headers['Access-Control-Allow-Origin'] = '*'
 	
-	return resp
+# 	return resp
 
-app.run()	
+app.run()

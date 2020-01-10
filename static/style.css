@@ -1,4 +1,9 @@
 
+body{
+	background-color: #222222;
+	color: #ffffff;
+}
+
 #deck{
 	background-image: url("matrix.png");
 	background-size: cover;
