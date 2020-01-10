@@ -1,4 +1,7 @@
 from flask import Flask, request, Response, render_template
+import pymysql.cursors
+
+connection = pymysql.connect(host="CREDS.TXT", user="CREDENTIALS.TXT", password="READ IN FROM CREDENTIALS.TXT", db="codebreakers")
 
 app = Flask(__name__)
 
@@ -13,7 +16,29 @@ def signupPage():
 
 @app.route("/signupAction", methods=["POST"])
 def signupAction():
-	print(request.get_data())
+	
+	fields = [i.split("=")[1] for i in str(request.get_data())[2:-1].split("&")]
+	#trust me, it works.
+
+	username = fields[0]
+	password = fields[1]
+	confirm  = fields[2]
+	
+	print(username)
+	print(password)
+	print(confirm)
+
+	with connection.cursor as cursor:
+		query = "GET x rows where username =", username
+		cursor.execute(query, (values, separated, by, commas))
+		connection.commit()
+
+		# if that works...
+		query = "INSERT row where username =", username
+		cursor.execute(query, (values, separated, by, commas))
+		connection.commit()
+
+		return redirect("/signupsuccess")
 
 @app.route("/login")
 def loginPage():
