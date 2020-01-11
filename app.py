@@ -1,7 +1,16 @@
 from flask import Flask, request, Response, render_template
 import pymysql.cursors
+from hashlib import sha256
 
-connection = pymysql.connect(host="CREDS.TXT", user="CREDENTIALS.TXT", password="READ IN FROM CREDENTIALS.TXT", db="codebreakers")
+with open("credentials.txt", "r") as f:
+	contents = f.read()
+	contentList = contents.split("\n")
+	creds = {}
+	for credential in contentList:
+		key, value = credential.split("=")
+		creds[key] = value
+
+connection = pymysql.connect(host=creds["DB_HOST"], user=creds["DB_USERNAME"], password=creds["DB_PASSWORD"], db=creds["DB_NAME"])
 
 app = Flask(__name__)
 
@@ -23,22 +32,32 @@ def signupAction():
 	username = fields[0]
 	password = fields[1]
 	confirm  = fields[2]
+	email    = fields[3]
 	
-	print(username)
-	print(password)
-	print(confirm)
+	#check if their confirm was correct (can handle this with JSON on the page itself)
+	if(password != confirm):
+		print("DEBUG: password and confirm did not match")
+		return render_template("/signupfail.html", reason="password and confirmation did not match.")
 
-	with connection.cursor as cursor:
-		query = "GET x rows where username =", username
-		cursor.execute(query, (values, separated, by, commas))
+	#hash the password
+	h = sha256()
+	h.update(password.encode('utf-8'))
+	password = h.hexdigest()[:20] # the hash is too long!
+
+	with connection.cursor() as cursor:
+		query = "SELECT userid FROM codebreakers.users WHERE username=%s"
+		cursor.execute(query, (username))
 		connection.commit()
+		if(cursor.fetchone() == None):
+			# if that works...
+			query = "INSERT INTO codebreakers.users (username, password, email) VALUES (%s, %s, %s)"
+			cursor.execute(query, (username, password, email))
+			connection.commit()
 
-		# if that works...
-		query = "INSERT row where username =", username
-		cursor.execute(query, (values, separated, by, commas))
-		connection.commit()
+			return render_template("/signupsuccess.html", username=username)
 
-		return redirect("/signupsuccess")
+		else: #username is taken
+			return render_template("/signupfail.html", reason="username already in use.")
 
 @app.route("/login")
 def loginPage():
@@ -65,5 +84,11 @@ def loginAction():
 # 	resp.headers['Access-Control-Allow-Origin'] = '*'
 	
 # 	return resp
+
+
+
+@app.errorhandler(500)
+def server_error(error):
+    return render_template('errors/500.html'), 500
 
 app.run()
