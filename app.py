@@ -2,6 +2,18 @@ from flask import Flask, request, Response, render_template
 import pymysql.cursors
 from hashlib import sha256
 
+#for use with hashing passwords below in a helper called sha_hash
+h = sha256()
+
+def get_fields(request):
+	return [i.split("=")[1] for i in str(request.get_data())[2:-1].split("&")]
+
+def sha_hash(password):
+	h.update(password.encode('utf-8'))
+	password = h.hexdigest()[:20] # the hash is too long for the varchar(45)
+	return password
+
+#this block reads in all data from credentials.txt so the whole server has access to it. Stores the data in 'creds'
 with open("credentials.txt", "r") as f:
 	contents = f.read()
 	contentList = contents.split("\n")
@@ -26,8 +38,7 @@ def signupPage():
 @app.route("/signupAction", methods=["POST"])
 def signupAction():
 	
-	fields = [i.split("=")[1] for i in str(request.get_data())[2:-1].split("&")]
-	#trust me, it works.
+	fields = get_fields(request)
 
 	username = fields[0]
 	password = fields[1]
@@ -40,9 +51,7 @@ def signupAction():
 		return render_template("/signupfail.html", reason="password and confirmation did not match.")
 
 	#hash the password
-	h = sha256()
-	h.update(password.encode('utf-8'))
-	password = h.hexdigest()[:20] # the hash is too long!
+	password = sha_hash(password)
 
 	with connection.cursor() as cursor:
 		query = "SELECT userid FROM codebreakers.users WHERE username=%s"
@@ -65,7 +74,24 @@ def loginPage():
 
 @app.route("/loginAction", methods=["POST"])
 def loginAction():
-	print(request.get_data())
+	fields = get_fields(request)
+	username = fields[0]
+	password = fields[1]
+
+	#hash the password
+	password = sha_hash(password)
+
+	with connection.cursor() as cursor:
+		query = "SELECT userid FROM codebreakers.users WHERE username=%s AND password=%s"
+		cursor.execute(query, (username, password))
+		connection.commit()
+
+		if(cursor.fetchone() != None): # note the NOT None
+
+			return render_template("/gamepage.html", username=username)
+
+		else: # user not found
+			return render_template("/loginfail.html", reason="That combination of username and password was not found in our systems.")
 
 # @app.route("/gamepage")
 # def gamepage():

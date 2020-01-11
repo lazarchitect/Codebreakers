@@ -7,9 +7,20 @@
 
 	Welcome to the Codebreakers website.
 	<br>
+
+	{% if session %}
+
+	<!-- Is the user logged in? put that code here.-->
+
+
+	{% else %}
+
+	
 	<a href="/login">Log In</a>
 	<br>
 	<a href="/signup">Sign Up</a>
+
+	{% endif %}
 
 </body>
 </html>
