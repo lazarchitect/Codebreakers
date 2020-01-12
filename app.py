@@ -1,9 +1,12 @@
 from flask import Flask, request, Response, render_template
 import pymysql.cursors
 from hashlib import sha256
+from session import Session
 
 #for use with hashing passwords below in a helper called sha_hash
 h = sha256()
+
+session = None
 
 def get_fields(request):
 	return [i.split("=")[1] for i in str(request.get_data())[2:-1].split("&")]
@@ -54,8 +57,8 @@ def signupAction():
 	password = sha_hash(password)
 
 	with connection.cursor() as cursor:
-		query = "SELECT userid FROM codebreakers.users WHERE username=%s"
-		cursor.execute(query, (username))
+		query = "SELECT userid FROM codebreakers.users WHERE username=%s OR email=%s"
+		cursor.execute(query, (username, email))
 		connection.commit()
 		if(cursor.fetchone() == None):
 			# if that works...
@@ -66,7 +69,7 @@ def signupAction():
 			return render_template("/signupsuccess.html", username=username)
 
 		else: #username is taken
-			return render_template("/signupfail.html", reason="username already in use.")
+			return render_template("/signupfail.html", reason="username or email already in use.")
 
 @app.route("/login")
 def loginPage():
@@ -82,22 +85,24 @@ def loginAction():
 	password = sha_hash(password)
 
 	with connection.cursor() as cursor:
-		query = "SELECT userid FROM codebreakers.users WHERE username=%s AND password=%s"
+		query = "SELECT email FROM codebreakers.users WHERE username=%s AND password=%s"
 		cursor.execute(query, (username, password))
 		connection.commit()
 
-		if(cursor.fetchone() != None): # note the NOT None
+		result = cursor.fetchone()
+		
+		email = result[0]
 
-			return render_template("/gamepage.html", username=username)
+		if(result != None): # note the NOT None
+			session = Session(username, email)
+			return render_template("/gamepage.html", username=username, session = session)
 
 		else: # user not found
 			return render_template("/loginfail.html", reason="That combination of username and password was not found in our systems.")
 
-# @app.route("/gamepage")
-# def gamepage():
-# 	"""The webpage for being in a game. Loads up game HTML elements.
-# 	Should be unable to reach here manually."""
-# 	return render_template("gamepage.html")
+@app.route("/gamepage")
+def gamepage():
+	return render_template("gamepage.html")
 
 # @app.route("/piledrop", methods=["POST"])
 # def piledrop():
