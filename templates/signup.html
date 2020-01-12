@@ -4,21 +4,133 @@
 
     <head>
         <title> -- Sign Up -- </title>
+        
+        
+        <script>
+
+            function containsDigit(string){
+                for (let index = 0; index < string.length; index++) {
+                    var character = string.charAt(index);
+                    if(Number.isInteger(parseInt(character))){
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            function containsSpecial(string){
+                return /[~`!#$%\^&*@+=\-\[\]\\';,/{}|\\":<>\?]/g.test(string);
+            }
+
+            function checkStrength(){
+
+                
+                var password1 = document.getElementById("password1").value;
+                var total = 5;
+                if(password1 === password1.toUpperCase()){
+                    console.log("password was same as itself in uppercase");
+                    total--;
+                }
+                if(password1 === password1.toLowerCase()){
+                    console.log("password was same as itself in lowercase");
+                    total--;
+                }
+                if(containsDigit(password1)===false){
+                    console.log("password contained zero digits");
+                    total--;
+                }
+                if(containsSpecial(password1)===false){
+                    console.log("password contained zero specials");
+                    total--;
+                }
+                if(password1.length < 10){
+                    total = 0;
+                }
+
+                var result;
+                var color;
+                var disable = false;
+
+                if(total===5){
+                    result = "You have a strong password.";
+                    color = "green";
+                    document.getElementById("submit_button").disabled = false;
+                }
+                else if(total===4 || password1.length > 17){
+                    result = "You have a somewhat strong password.";
+                    color = "yellow";
+                    document.getElementById("submit_button").disabled = false;
+                }
+                else if(total===3){
+                    result = "You have a somewhat weak password.";
+                    color = "orange";
+                    document.getElementById("submit_button").disabled = false;
+                }
+                else if(total<3){
+                    result = "You have a weak password.";
+                    color = "red";
+                    document.getElementById("submit_button").disabled = true;
+                }
+
+                var elem = document.getElementById("strengthChecker");
+                elem.style.color = color;
+                elem.innerText = result;
+                document.getElementById("strengthChecker").style.visibility = "visible";
+            }
+            
+            function checkMatch(){
+                
+                var password1 = document.getElementById("password1").value;
+                var password2 = document.getElementById("password2").value;
+                
+                if(password1 === password2){
+                    document.getElementById("confirmMatch").style.visibility = "hidden";
+                    document.getElementById("submit_button").disabled = false;
+                }
+                else{
+                    document.getElementById("confirmMatch").style.visibility = "visible";
+                    document.getElementById("submit_button").disabled = true;
+                }
+
+
+            }
+
+        
+        
+        </script>
+        
+        
         <link rel="stylesheet" type="text/css" href="static/style.css">
+
     </head>
 
     <body>
         <form action="/signupAction" method="POST">
+            
             Username: <input type="text" name="username">
             <br>
-            Password: <input type="password" name="password">
+            Password: <input type="password" name="password" id="password1" onkeyup="checkStrength()">
             <br>
-            Confirm Password: <input type="password" name="confirmpassword">
+            Confirm Password: <input type="password" name="confirmpassword" id="password2" onkeyup="checkMatch()">
             <br>
-            Email: <input type="password" name="email">
+            Email: <input type="text" name="email">
             <br>
-            <input type="submit">
+            <input type="submit" id="submit_button" disabled=true>
+        
         </form>
+
+        <div id="strengthChecker" style="visibility: hidden;">
+            
+        </div>
+
+        <div id="confirmMatch" style="visibility: hidden;">
+            Your passwords do not match.
+        </div>
+
+        
+
+
+
     </body>
 
 </html>

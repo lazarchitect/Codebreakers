@@ -45,3 +45,10 @@ body{
 	font-family: Garamond;
 	line-height: 200px;
 }
+
+#confirmMatch{
+	height: 20px;
+	width: 200px;
+	background-color: firebrick;
+	z-index: 2;
+}
