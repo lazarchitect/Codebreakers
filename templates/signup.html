@@ -4,8 +4,7 @@
 
     <head>
         <title> -- Sign Up -- </title>
-        
-        
+                
         <script>
 
             function containsDigit(string){
@@ -49,7 +48,6 @@
 
                 var result;
                 var color;
-                var disable = false;
 
                 if(total===5){
                     result = "You have a strong password.";
@@ -69,7 +67,6 @@
                 else if(total<3){
                     result = "You have a weak password.";
                     color = "red";
-                    document.getElementById("submit_button").disabled = true;
                 }
 
                 var elem = document.getElementById("strengthChecker");
@@ -78,27 +75,37 @@
                 document.getElementById("strengthChecker").style.visibility = "visible";
             }
             
-            function checkMatch(){
-                
+            function setDisable(){
+                var username  = document.getElementById("username").value;
                 var password1 = document.getElementById("password1").value;
                 var password2 = document.getElementById("password2").value;
+                var email     = document.getElementById("email").value;
                 
-                if(password1 === password2){
-                    document.getElementById("confirmMatch").style.visibility = "hidden";
-                    document.getElementById("submit_button").disabled = false;
-                }
-                else{
+                if(password1 !== password2){
                     document.getElementById("confirmMatch").style.visibility = "visible";
                     document.getElementById("submit_button").disabled = true;
+                    return;
+                }
+                else{
+                    document.getElementById("confirmMatch").style.visibility = "hidden";
                 }
 
+                if(username=="" || password1=="" || password2=="" || email==""){
+                    document.getElementById("submit_button").disabled = true;
+                    return;
+                }
+
+                if(password1.length < 10){
+                    document.getElementById("submit_button").disabled = true;
+                    return;
+                }
+
+                // all seems to be in order.
+                document.getElementById("submit_button").disabled = false;
 
             }
-
-        
         
         </script>
-        
         
         <link rel="stylesheet" type="text/css" href="static/style.css">
 
@@ -107,13 +114,17 @@
     <body>
         <form action="/signupAction" method="POST">
             
-            Username: <input type="text" name="username">
+            Username: 
+            <input type="text"      name="username"          id="username"   onkeyup="setDisable()">
             <br>
-            Password: <input type="password" name="password" id="password1" onkeyup="checkStrength()">
+            Password: 
+            <input type="password"  name="password"          id="password1"  onkeyup="setDisable(); checkStrength()">
             <br>
-            Confirm Password: <input type="password" name="confirmpassword" id="password2" onkeyup="checkMatch()">
+            Confirm Password: 
+            <input type="password"  name="confirmpassword"   id="password2"  onkeyup="setDisable()">
             <br>
-            Email: <input type="text" name="email">
+            Email: 
+            <input type="text"      name="email"             id="email"      onkeyup="setDisable()">
             <br>
             <input type="submit" id="submit_button" disabled=true>
         
@@ -126,10 +137,6 @@
         <div id="confirmMatch" style="visibility: hidden;">
             Your passwords do not match.
         </div>
-
-        
-
-
 
     </body>
 
