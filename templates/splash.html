@@ -11,13 +11,17 @@
     <body>
 
         <div id="topbar">
-            <span class="topbarSpan" id="signupSpan" onclick="notify()">
-                <span id="signupText" class="reverseSkew">Sign Up</span>
-            </span>
+            <a href="/signup">
+                <span class="topbarSpan" id="signupSpan">
+                    <span id="signupText" class="reverseSkew">Sign Up</span>
+                </span>
+            </a>
 
-            <span class="topbarSpan" id="loginSpan">
-                <span class="reverseSkew">Log In</span>
-            </span>
+            <a href="/login">
+                <span class="topbarSpan" id="loginSpan">
+                    <span class="reverseSkew">Log In</span>
+                </span>
+            </a>
 
             <span class="topbarSpan" id="nameSpan">
                 C o d e b r e a k e r s
@@ -34,6 +38,10 @@
             <!-- JS will populate a list of <a> tags, which each create a game with the waiting user -->
             <script>fillWaitingRoom();</script>
         </div>
+
+        {% else %}
+
+        <p>Log in or sign up in order to play.</p>
 
 
 	    {% endif %}

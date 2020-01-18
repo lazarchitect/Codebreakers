@@ -32,7 +32,8 @@ app = Flask(__name__)
 @app.route("/")
 def splash():
 	"""main page. Loads up splash screen."""
-	return render_template("splash.html")
+	print("Session:", session)
+	return render_template("splash.html", session = session)
 
 @app.route("/signup")
 def signupPage():
@@ -91,11 +92,12 @@ def loginAction():
 
 		result = cursor.fetchone()
 		
-		email = result[0]
-
 		if(result != None): # note the NOT None
+			email = result[0]
 			session = Session(username, email)
-			return render_template("/gamepage.html", username=username, session = session)
+			print("Session created upon successful login")
+			print("Session:", session)
+			return render_template("/splash.html", username=username, session = session)
 
 		else: # user not found
 			return render_template("/loginfail.html", reason="That combination of username and password was not found in our systems.")

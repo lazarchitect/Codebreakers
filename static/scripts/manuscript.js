@@ -1,7 +1,3 @@
-function notify() {
-    alert("So... you have chosen... to sign up");
-}
-
 var waitingUsers = ["Eddie", "Sean", "Chris", "Mike"];
 
 
@@ -29,6 +25,5 @@ function fillWaitingRoom(){
 
         waitingRoom.appendChild(line);
 
-        // waitingRoom.appendChild(document.createElement("br"));
     }
 }
