@@ -1,0 +1,91 @@
+body{
+	background-color: #004455;
+}
+
+
+#topbar{
+	overflow: hidden;
+	margin: auto; /* center align */
+ 	height: 70px;
+	width: 90%;
+	/* background-image: linear-gradient(blue, green); */
+	background-color: #55aadd;
+	border-radius: 40px;
+	position: relative;
+}
+
+.topbarSpan{
+	position: absolute;
+	height: 100%;
+	transform:skew(20deg);
+}
+
+#signupSpan{
+	width: 10%;
+	left: -10px;
+	background-color: #0E87FF;
+	z-index: 3;
+	/* text-align: center; */
+	padding-left: 10px; /* because the parent div had to be shifted to account for skew */
+}
+
+#loginSpan{
+	left: 10%;
+	width: 10%;
+	background-color: #22cc44;
+	z-index: 2;
+	/* text-align: center; */
+}
+
+#nameSpan{
+	padding-top: 0%;
+	left: 22%;
+}
+
+.reverseSkew{
+	display: inline-block;
+	transform: skew(-20deg);
+	width: 100%;
+	padding-top: 17%;
+	font-family: "Trebuchet MS";
+	font-size: 1.5vw;
+	text-align: center;
+}
+
+#nameSpan{
+	display: inline-block;
+	font-family: "Copperplate";
+	font-size: 40px;
+	transform: skew(0deg);
+	padding-top: 1%;
+}
+
+#waitingRoom{
+	border: 1px solid black;
+	line-height: 150%; /* controls 'thickness' of each div inside*/
+	width: 20%;
+}
+
+.openGame{
+	height: 20%;
+	width: 100%;
+}
+
+/*******************************
+SELECTORS
+*******************************/
+
+#loginSpan:hover{
+	background-color: #55ff77;
+}
+#loginSpan:active{
+	background-color: #99ffbb;
+}
+
+#signupSpan:hover{
+	background-color: #22bbFF;
+}
+
+#signupSpan:active{
+	background-color: #44ddFF;
+}

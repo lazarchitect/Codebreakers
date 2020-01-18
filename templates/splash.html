@@ -1,26 +1,46 @@
-<html>
-<head>
-	<title>Welcome - Codebreakers</title>
-	<link rel="stylesheet" type="text/css" href="static/style.css">
-</head>
-<body>
-
-	Welcome to the Codebreakers website.
-	<br>
-
-	{% if session %}
-
-	<!-- Is the user logged in? put that code here.-->
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Appling</title>
+        <link rel="stylesheet" href="/static/styles/splashStyle.css">
+        <script src="static/scripts/manuscript.js"></script>
+    </head>
 
 
-	{% else %}
+    <body>
 
-	
-	<a href="/login">Log In</a>
-	<br>
-	<a href="/signup">Sign Up</a>
+        <div id="topbar">
+            <span class="topbarSpan" id="signupSpan" onclick="notify()">
+                <span id="signupText" class="reverseSkew">Sign Up</span>
+            </span>
 
-	{% endif %}
+            <span class="topbarSpan" id="loginSpan">
+                <span class="reverseSkew">Log In</span>
+            </span>
 
-</body>
+            <span class="topbarSpan" id="nameSpan">
+                C o d e b r e a k e r s
+            </span>
+        </div>
+        <br>
+
+        {% if session %}
+
+	    <!-- Is the user logged in? put that code here.-->
+        <button type="button" name="createGame">Create Game</button>
+        <br><br>
+        <div id="waitingRoom">
+            <!-- JS will populate a list of <a> tags, which each create a game with the waiting user -->
+            <script>fillWaitingRoom();</script>
+        </div>
+
+
+	    {% endif %}
+
+       
+
+    </body>
+
+
 </html>
