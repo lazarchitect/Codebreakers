@@ -1,10 +1,8 @@
-from flask import Flask, request, Response, render_template, session
+from flask import Flask, request, Response, render_template, session, redirect
 import pymysql.cursors
 from hashlib import sha256
 import os
 
-#for use with hashing passwords below in a helper called sha_hash
-h = sha256()
 
 
 
@@ -12,6 +10,8 @@ def get_fields(request):
 	return [i.split("=")[1] for i in str(request.get_data())[2:-1].split("&")]
 
 def sha_hash(password):
+	"""for use with hashing passwords"""
+	h = sha256()
 	h.update(password.encode('utf-8'))
 	password = h.hexdigest()[:20] # the hash is too long for the varchar(45)
 	return password
@@ -82,15 +82,26 @@ def loginPage():
 
 @app.route("/loginAction", methods=["POST"])
 def loginAction():
+
+	if 'username' in session:
+		print("user already logged in")
+		return redirect("/")
+
 	fields = get_fields(request)
 	username = fields[0]
 	password = fields[1]
 
 	#hash the password
+	print(fields)
+	print(password)
 	password = sha_hash(password)
+	print("hashed:", password)
+
 
 	with connection.cursor() as cursor:
+		print(cursor)
 		query = "SELECT email FROM codebreakers.users WHERE username=%s AND password=%s"
+		print(query, username, password)
 		cursor.execute(query, (username, password))
 		# connection.commit()
 
@@ -102,10 +113,16 @@ def loginAction():
 			session['username'] = username
 			print("Session created upon successful login")
 			print("Session:", session)
-			return render_template("/splash.html", username=username)
+			return redirect	("/")
 
 		else: # user not found
 			return render_template("/loginfail.html", reason="That combination of username and password was not found in our systems.")
+
+@app.route("/logout")
+def logout():
+	session.pop('username', None)
+	return redirect("/")
+
 
 @app.route("/gamepage")
 def gamepage():
