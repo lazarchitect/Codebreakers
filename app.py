@@ -1,12 +1,12 @@
-from flask import Flask, request, Response, render_template
+from flask import Flask, request, Response, render_template, session
 import pymysql.cursors
 from hashlib import sha256
-from session import Session
+import os
 
 #for use with hashing passwords below in a helper called sha_hash
 h = sha256()
 
-session = None
+
 
 def get_fields(request):
 	return [i.split("=")[1] for i in str(request.get_data())[2:-1].split("&")]
@@ -29,11 +29,15 @@ connection = pymysql.connect(host=creds["DB_HOST"], user=creds["DB_USERNAME"], p
 
 app = Flask(__name__)
 
+
+#for use with session
+app.secret_key = os.urandom(16)
+
 @app.route("/")
 def splash():
 	"""main page. Loads up splash screen."""
 	print("Session:", session)
-	return render_template("splash.html", session = session)
+	return render_template("splash.html")
 
 @app.route("/signup")
 def signupPage():
@@ -88,16 +92,17 @@ def loginAction():
 	with connection.cursor() as cursor:
 		query = "SELECT email FROM codebreakers.users WHERE username=%s AND password=%s"
 		cursor.execute(query, (username, password))
-		connection.commit()
+		# connection.commit()
 
 		result = cursor.fetchone()
+		print("login query result:", result)
 		
 		if(result != None): # note the NOT None
 			email = result[0]
-			session = Session(username, email)
+			session['username'] = username
 			print("Session created upon successful login")
 			print("Session:", session)
-			return render_template("/splash.html", username=username, session = session)
+			return render_template("/splash.html", username=username)
 
 		else: # user not found
 			return render_template("/loginfail.html", reason="That combination of username and password was not found in our systems.")
