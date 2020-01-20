@@ -60,6 +60,10 @@ body{
 	padding-top: 1%;
 }
 
+#createGameButton{
+	border-radius: 30px;
+}
+
 #waitingRoom{
 	border: 1px solid black;
 	line-height: 150%; /* controls 'thickness' of each div inside*/

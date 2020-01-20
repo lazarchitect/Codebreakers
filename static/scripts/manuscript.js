@@ -27,3 +27,12 @@ function fillWaitingRoom(){
 
     }
 }
+
+
+function createGame(){
+    /*
+    user clicks button. a game object is created, and a new game with the user's name is added to the list globally.
+    as for the user, nothing happens??? besides some visual indicator.
+    
+    */
+}

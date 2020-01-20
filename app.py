@@ -10,7 +10,7 @@ def get_fields(request):
 	return [i.split("=")[1] for i in str(request.get_data())[2:-1].split("&")]
 
 def sha_hash(password):
-	"""for use with hashing passwords"""
+	"""for use with hashing passwords."""
 	h = sha256()
 	h.update(password.encode('utf-8'))
 	password = h.hexdigest()[:20] # the hash is too long for the varchar(45)
