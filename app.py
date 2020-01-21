@@ -29,9 +29,10 @@ connection = pymysql.connect(host=creds["DB_HOST"], user=creds["DB_USERNAME"], p
 
 app = Flask(__name__)
 
-
 #for use with session
 app.secret_key = os.urandom(16)
+
+waitingRoom = ""
 
 @app.route("/")
 def splash():
@@ -123,6 +124,16 @@ def logout():
 	session.pop('username', None)
 	return redirect("/")
 
+
+@app.route("/getWaitingRoom", methods=["POST"])
+def getWaitingRoom():
+	return waitingRoom
+
+@app.route("/addToWaitingRoom", methods=["POST"])
+def addToWaitingRoom():
+	global waitingRoom
+	waitingRoom += " " + session['username']
+	return waitingRoom
 
 @app.route("/gamepage")
 def gamepage():

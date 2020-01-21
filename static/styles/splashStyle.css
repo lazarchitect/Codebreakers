@@ -68,6 +68,8 @@ body{
 	border: 1px solid black;
 	line-height: 150%; /* controls 'thickness' of each div inside*/
 	width: 20%;
+	min-height: 20px;
+	background-color: white;
 }
 
 .openGame{

@@ -1,9 +1,29 @@
-var waitingUsers = ["Eddie", "Sean", "Chris", "Mike"];
 
 
-function fillWaitingRoom(){
+function getWaitingUsers(){
+
+    var connection = new XMLHttpRequest();
+    connection.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+            fillWaitingRoom(this.responseText.split(" "));
+        }
+    }
+    connection.open("POST", "/getWaitingRoom");
+    connection.send();
+}
+
+
+
+
+function fillWaitingRoom(waitingUsers){
 
     var waitingRoom = document.getElementById("waitingRoom");
+    waitingRoom.innerHTML = "";
+    
+    if(waitingUsers.length == 0){
+        waitingRoom.style.backgroundColor = "white";
+        return;
+    }
 
     var i;
     for(i = 0; i < waitingUsers.length; i++){
@@ -16,7 +36,6 @@ function fillWaitingRoom(){
         else{
             line.style.backgroundColor = "white";
         }
-        line.setAttribute("class", "openGame");
         var anchor = document.createElement("a");
         anchor.setAttribute("href", "google.com");
         anchor.innerText = waitingUsers[i];
@@ -35,4 +54,16 @@ function createGame(){
     as for the user, nothing happens??? besides some visual indicator.
     
     */
+
+    alert("Game created. Now just wait, when someone joins you will automatically be taken into the game.");
+
+    var connection = new XMLHttpRequest();
+    connection.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200) {
+            fillWaitingRoom(this.responseText.split(" "));
+        }
+    }
+    connection.open("POST", "/addToWaitingRoom");
+    connection.send();
+
 }
