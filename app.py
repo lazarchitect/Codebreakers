@@ -132,6 +132,9 @@ def getWaitingRoom():
 @app.route("/addToWaitingRoom", methods=["POST"])
 def addToWaitingRoom():
 	global waitingRoom
+	if(session['hasCreatedGame']):
+		return "NOPE"
+	session['hasCreatedGame'] = true
 	waitingRoom += " " + session['username']
 	return waitingRoom
 

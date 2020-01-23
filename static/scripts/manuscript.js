@@ -60,7 +60,13 @@ function createGame(){
     var connection = new XMLHttpRequest();
     connection.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200) {
-            fillWaitingRoom(this.responseText.split(" "));
+            console.log(this.responseText);
+            if(this.responseText=="NOPE"){
+                alert("You cannot create more than one game. Wait for another player to join your existing game.");
+            }
+            else{
+                fillWaitingRoom(this.responseText.split(" "));
+            }
         }
     }
     connection.open("POST", "/addToWaitingRoom");
