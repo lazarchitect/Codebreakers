@@ -121,7 +121,17 @@ def loginAction():
 
 @app.route("/logout")
 def logout():
-	session.pop('username', None)
+	"""need to modify the waitingRoom variable so this user's game disappears from the list."""
+	global waitingRoom
+	waitingRoomUsers = waitingRoom.split(" ");
+	print(waitingRoomUsers)
+	for i in waitingRoomUsers:
+		print(i)
+		if i == session['username']:
+			waitingRoomUsers.remove(i)
+	waitingRoom = ' '.join(waitingRoomUsers)
+	print(waitingRoom)
+	session.clear()
 	return redirect("/")
 
 
@@ -132,9 +142,9 @@ def getWaitingRoom():
 @app.route("/addToWaitingRoom", methods=["POST"])
 def addToWaitingRoom():
 	global waitingRoom
-	if(session['hasCreatedGame']):
+	if("hasCreatedGame" in session):
 		return "NOPE"
-	session['hasCreatedGame'] = true
+	session['hasCreatedGame'] = True
 	waitingRoom += " " + session['username']
 	return waitingRoom
 
